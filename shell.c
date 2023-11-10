@@ -76,7 +76,7 @@ char **split_line(char *line)
  *
  * Return: 1 on sucess, 0 otherwise
  */
-int execute_args(char **args)
+int execute_args(char **args, char *shell)
 {
 	pid_t pid;
 	int status;
@@ -91,8 +91,7 @@ int execute_args(char **args)
 		/* child process */
 		if (execve(args[0], args, NULL) == -1) /* if execve fails to execute new program */
 		{
-			fprintf(stderr, "%s: error std", args[0]);
-			perror("error in execute_args: child process");
+			perror(shell);
 		}
 		exit(EXIT_FAILURE);
 	}
@@ -113,7 +112,7 @@ int execute_args(char **args)
  * and wait for the user to enter a command
  *
  */
-void display_shell_prompt(void)
+void display_shell_prompt(char *shell)
 {
 	char *line;
 	char **args;
@@ -123,7 +122,7 @@ void display_shell_prompt(void)
 		printf("$ "); /* print prompt symbol */
 		line = read_line(); /* read line from stdin */
 		args = split_line(line); /* tokenize line */
-		status = execute_args(args); /* execute arguments (command and options) */
+		status = execute_args(args, shell); /* execute arguments (command and options) */
 
 		/* free allocated memory to avoid memory leaks */
 		free(line);

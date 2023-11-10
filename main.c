@@ -5,9 +5,15 @@
  *
  * Return: always 0 (on success)
  */
-int main(void)
+int main(int argc, char *argv[])
 {
-	display_shell_prompt();
+	(void)argc;  /* unused parameter */
+
+	/** 
+	 * argv[0] is the output_file name
+	 * which is in this case the shell name
+	 */
+	display_shell_prompt(argv[0]);
 
     return (0);
 }
