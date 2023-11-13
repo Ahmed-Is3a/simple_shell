@@ -1,6 +1,5 @@
 #include "main.h"
-#include <sys/wait.h>
-#include <string.h>
+
 
 /**
  * read_line - read a line from stdin
@@ -14,9 +13,9 @@ char *read_line(void)
 
 	if (getline(&line, &bufsize, stdin) == -1) /* if getline fails */
 	{
-			free(line); /* avoid memory leaks when getline fails */
-			perror("error while reading the line from stdin");
-			exit(EXIT_FAILURE);
+		free(line); /* avoid memory leaks when getline fails */
+		perror("error while reading the line from stdin");
+		exit(EXIT_FAILURE);
 	}
 	return (line);
 }
@@ -76,10 +75,13 @@ char **split_line(char *line)
  *
  * Return: 1 on sucess, 0 otherwise
  */
-int execute_args(char **args, char *shell)
+int execute_args(char *command, char *shell)
 {
+	char **args;
 	pid_t pid;
 	int status;
+
+	args = split_line(command); /* tokenize line */
 
 	if (args[0] == NULL) /* if no command was entered */
 		return (-1);
@@ -89,7 +91,7 @@ int execute_args(char **args, char *shell)
 	if (pid ==  0) /* child process created if fork returns 0 */
 	{
 		/* child process */
-		if (execve(args[0], args, NULL) == -1) /* if execve fails to execute new program */
+		if (execve(args[0], args, NULL) == -1) /* if execve failed */
 		{
 			perror(shell);
 		}
@@ -111,27 +113,27 @@ int execute_args(char **args, char *shell)
  * display_shell_prompt - display a shell prompt
  * and wait for the user to enter a command
  *
+ * @shell: shell name
  */
 void display_shell_prompt(char *shell)
 {
 	char *line;
-	char **args;
-	int status = -1;
+	int int_mode = 1;
 
-	do {
-		printf("$ "); /* print prompt symbol */
+	while (int_mode)
+	{
+		/* test whether a file descriptor refers to a terminal */
+		int_mode = isatty(STDIN_FILENO);
+
+		if (int_mode == 1)
+			write(STDOUT_FILENO, "$ ", 2);
+
 		line = read_line(); /* read line from stdin */
-		args = split_line(line); /* tokenize line */
-		status = execute_args(args, shell); /* execute arguments (command and options) */
+		/* handle multi commands */
+		handle_multi_commands(line, shell);
 
 		/* free allocated memory to avoid memory leaks */
 		free(line);
-		free(args);
-		/* exit with status */
-		if (status >= 0)
-		{
-			exit(status);
-		}
-	} while (status == -1);
-}
+	}
 
+}
