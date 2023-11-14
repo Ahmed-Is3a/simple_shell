@@ -71,11 +71,10 @@ char **split_line(char *line)
 /**
  * execute_args - map if command is a builtin or a process
  *
- * @args: command to be executed
- *
+ * @command: command to be executed
  * Return: 1 on sucess, 0 otherwise
  */
-int execute_args(char *command, char *shell)
+int execute_args(char *command)
 {
 	char **args;
 	pid_t pid;
@@ -93,8 +92,11 @@ int execute_args(char *command, char *shell)
 		/* child process */
 		if (execve(args[0], args, NULL) == -1) /* if execve failed */
 		{
+			/* handle PATH */
+			handle_PATH(args);
 			perror(shell);
 		}
+
 		exit(EXIT_FAILURE);
 	}
 	else if (pid < 0) /* error, fork fail if return negative value */
@@ -112,10 +114,8 @@ int execute_args(char *command, char *shell)
 /**
  * display_shell_prompt - display a shell prompt
  * and wait for the user to enter a command
- *
- * @shell: shell name
  */
-void display_shell_prompt(char *shell)
+void display_shell_prompt(void)
 {
 	char *line;
 	int int_mode = 1;
@@ -130,7 +130,7 @@ void display_shell_prompt(char *shell)
 
 		line = read_line(); /* read line from stdin */
 		/* handle multi commands */
-		handle_multi_commands(line, shell);
+		handle_multi_commands(line);
 
 		/* free allocated memory to avoid memory leaks */
 		free(line);
