@@ -12,12 +12,11 @@
 #define MAX_COMMANDS 10
 #define MAX_COMMAND_LENGTH 100
 
-extern char *shell;
 int main(int argc, char *argv[]);
 int pass_betty_check(void);
-int execute_args(char *command);
-void handle_PATH(char **args);
-void handle_multi_commands(char *input);
-void display_shell_prompt(void);
+int execute_args(char *command, char *shell);
+void handle_PATH(char **args, char *shell);
+void handle_multi_commands(char *input, char *shell);
+void display_shell_prompt(char *shell);
 
 #endif

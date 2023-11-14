@@ -5,7 +5,7 @@
  *
  * @input: the command which the user entered
  */
-void handle_multi_commands(char *input)
+void handle_multi_commands(char *input, char *shell)
 {
 	int i;
 	char *commands[MAX_COMMANDS];
@@ -22,6 +22,6 @@ void handle_multi_commands(char *input)
 	/*  Execute each command in a separate child process */
 	for (i = 0; i < num_of_commands; ++i)
 	{
-		execute_args(commands[i]);
+		execute_args(commands[i], shell);
 	}
 }

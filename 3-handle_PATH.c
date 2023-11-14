@@ -1,7 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
 #include "main.h"
 
 /**
@@ -9,7 +5,7 @@
  *
  * @args: command arguments
 */
-void handle_PATH(char **args)
+void handle_PATH(char **args, char *shell)
 {
 	char *path;
 	char full_path[BUFF_SIZE];
