@@ -4,6 +4,7 @@
  * handle_PATH - handle the path of the command
  *
  * @args: command arguments
+ * @shell: shell name
 */
 void handle_PATH(char **args, char *shell)
 {

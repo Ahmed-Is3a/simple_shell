@@ -4,6 +4,7 @@
  * handle_multi_commands - handles multipule commands when seperated with (;)
  *
  * @input: the command which the user entered
+ * @shell: shell name
  */
 void handle_multi_commands(char *input, char *shell)
 {

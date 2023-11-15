@@ -2,7 +2,7 @@
 
 /**
  * exit_shell - trminate the shell loop
- * @i
+ * @command: command
 */
 void exit_shell(char *command)
 {

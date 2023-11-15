@@ -72,6 +72,7 @@ char **split_line(char *line)
  * execute_args - map if command is a builtin or a process
  *
  * @command: command to be executed
+ * @shell: shell name
  * Return: 1 on sucess, 0 otherwise
  */
 int execute_args(char *command, char *shell)
@@ -89,7 +90,6 @@ int execute_args(char *command, char *shell)
 	pid = fork();
 	if (pid ==  0) /* child process created if fork returns 0 */
 	{
-			
 		/* child process */
 		if (execve(args[0], args, NULL) == -1) /* if execve failed */
 		{
@@ -115,6 +115,7 @@ int execute_args(char *command, char *shell)
 /**
  * display_shell_prompt - display a shell prompt
  * and wait for the user to enter a command
+ * @shell: shell name
  */
 void display_shell_prompt(char *shell)
 {
