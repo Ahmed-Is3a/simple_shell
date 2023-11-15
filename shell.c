@@ -89,6 +89,7 @@ int execute_args(char *command, char *shell)
 	pid = fork();
 	if (pid ==  0) /* child process created if fork returns 0 */
 	{
+			
 		/* child process */
 		if (execve(args[0], args, NULL) == -1) /* if execve failed */
 		{
@@ -129,6 +130,7 @@ void display_shell_prompt(char *shell)
 			write(STDOUT_FILENO, "$ ", 2);
 
 		line = read_line(); /* read line from stdin */
+		exit_shell(line);
 		/* handle multi commands */
 		handle_multi_commands(line, shell);
 
