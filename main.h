@@ -19,5 +19,6 @@ void handle_PATH(char **args, char *shell);
 void handle_multi_commands(char *input, char *shell);
 void display_shell_prompt(char *shell);
 void exit_shell(char *input);
+int builtin_cd(char **args);
 
 #endif

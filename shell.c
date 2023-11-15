@@ -85,30 +85,32 @@ int execute_args(char *command, char *shell)
 
 	if (args[0] == NULL) /* if no command was entered */
 		return (-1);
-
-	/* create a new process */
-	pid = fork();
-	if (pid ==  0) /* child process created if fork returns 0 */
-	{
-		/* child process */
-		if (execve(args[0], args, NULL) == -1) /* if execve failed */
+	/* Check if the command is "cd" */
+		if (builtin_cd(args) == 1)
+			return (1);
+		/* create a new process */
+		pid = fork();
+		if (pid ==  0) /* child process created if fork returns 0 */
 		{
-			/* handle PATH */
-			handle_PATH(args, shell);
-			perror(shell);
-		}
+			/* child process */
+			if (execve(args[0], args, NULL) == -1) /* if execve failed */
+			{
+				/* handle PATH */
+				handle_PATH(args, shell);
+				perror(shell);
+			}
 
-		exit(EXIT_FAILURE);
-	}
-	else if (pid < 0) /* error, fork fail if return negative value */
-		perror("error in execute_args: forking");
-	else
-	{
-		/* parent process */
-		do {
-			waitpid(pid, &status, 0); /* wait for the child process to complete */
-		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
-	}
+			exit(EXIT_FAILURE);
+		}
+		else if (pid < 0) /* error, fork fail if return negative value */
+			perror("error in execute_args: forking");
+		else
+		{
+			/* parent process */
+			do {
+				waitpid(pid, &status, 0); /* wait for the child process to complete */
+			} while (!WIFEXITED(status) && !WIFSIGNALED(status));
+		}
 	return (-1);
 }
 
