@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include "main.h"
 /**
  * pass_betty_check -  a beautiful code that passes the Betty checks
  *
@@ -7,6 +7,6 @@
 */
 int pass_betty_check(void)
 {
-	printf("Betty check passed!\n");
+	write(STDOUT_FILENO, "Betty check passed!\n", 2);
 	return (0);
 }
