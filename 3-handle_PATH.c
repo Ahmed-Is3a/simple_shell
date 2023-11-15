@@ -5,18 +5,19 @@
  *
  * @args: command arguments
  * @shell: shell name
-*/
+ */
 void handle_PATH(char **args, char *shell)
 {
 	char *path;
 	char full_path[BUFF_SIZE];
-	char *token;
+	char *token, *full_path_ptr;
+	char *args_ptr;
 
 	/* Get the PATH environment variable */
 	path = getenv("PATH");
 	if (path == NULL)
 	{
-		fprintf(stderr, "PATH environment variable not set.\n");
+		/* fprintf(stderr, "PATH environment variable not set.\n"); */
 		exit(EXIT_FAILURE);
 	}
 
@@ -25,7 +26,31 @@ void handle_PATH(char **args, char *shell)
 	while (token != NULL)
 	{
 		/* Construct the full path to the executable */
-		snprintf(full_path, sizeof(full_path), "%s/%s", token, args[0]);
+		full_path_ptr = full_path;
+
+		/* Copy the directory path */
+		while (*token != '\0')
+		{
+			*full_path_ptr = *token;
+			full_path_ptr++;
+			token++;
+		}
+
+		/*  Add '/' between directory path and executable name */
+		*full_path_ptr = '/';
+		full_path_ptr++;
+
+		/*  Copy the executable name */
+		args_ptr = args[0];
+		while (*args_ptr != '\0')
+		{
+			*full_path_ptr = *args_ptr;
+			full_path_ptr++;
+			args_ptr++;
+		}
+
+		/* Null-terminate the string */
+		*full_path_ptr = '\0';
 
 		/* execute the command */
 		execve(full_path, args, NULL);
